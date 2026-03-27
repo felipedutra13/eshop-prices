@@ -21,9 +21,7 @@ class PricesController {
         const exchangeRateApiService = await ExchangeRateApiService.getInstance();
         const pricesResult = [];
 
-        const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2EXFcESThgiMEIey_crlN7zKMB07tEYsI1JllfkEglZODlTlECwZkRGGICqMEs2jF9e-1L1tpfblu/pub?gid=0&single=true&output=csv";
-
-        const googleSheetService = new GoogleSheetService(URL);
+        const googleSheetService = new GoogleSheetService({ sheetUrl: process.env.GOOGLE_SHEET_URL, scriptUrl: process.env.GOOGLE_APP_URL });
         const games = await googleSheetService.getGames();
 
         const nintendoService = new NintendoStoreService(exchangeRateApiService);
@@ -39,6 +37,9 @@ class PricesController {
 
             console.log(game.title);
             let prices = await nintendoService.getPrices(uid, game.title);
+
+            googleSheetService.updateGamePrice({ name: game.title, uid, price: (prices.discount || prices.price)});
+
             pricesResult.push(prices);
 
             await new Promise(resolve => setTimeout(resolve, TIMEOUT));
