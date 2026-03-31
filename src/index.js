@@ -6,4 +6,4 @@ const pricesController = new PricesController();
 const mailService = new MailService();
 
 let result = await pricesController.getPrices();
-mailService.sendSummary(result);
+await mailService.sendSummary(result);

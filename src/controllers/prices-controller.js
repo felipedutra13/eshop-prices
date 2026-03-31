@@ -35,10 +35,10 @@ class PricesController {
                 uid = await nintendoService.findExternalId(game.title);
             }
 
-            console.log(game.title);
             let prices = await nintendoService.getPrices(uid, game.title);
+            prices.lowestPrice = game.lowestPrice;
 
-            googleSheetService.updateGamePrice({ name: game.title, uid, price: (prices.discount || prices.price)});
+            googleSheetService.updateGamePrice({ name: game.title, uid, price: (prices.discount || prices.price), sheetName: 'dev' });
 
             pricesResult.push(prices);
 

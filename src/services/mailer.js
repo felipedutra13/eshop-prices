@@ -14,12 +14,15 @@ function generateGamesTableHtml(games) {
     let rows = games.map(game => {
         const originalPrice = parseFloat(game.price);
         const salePrice = game.discount ? parseFloat(game.discount) : originalPrice;
+        const lowestPrice = game.lowestPrice ? parseFloat(game.lowestPrice) : 9999;
         const hasDiscount = salePrice < originalPrice;
         
         // Cálculo da porcentagem de desconto
         const percentageOff = hasDiscount 
             ? Math.round(((originalPrice - salePrice) / originalPrice) * 100) 
             : 0;
+        
+        const isLowest = lowestPrice > salePrice;
 
         return `
             <tr>
@@ -30,9 +33,17 @@ function generateGamesTableHtml(games) {
                 </td>
                 <td style="${tdStyle}">
                     ${hasDiscount 
-                        ? `<span style="text-decoration: line-through; color: #999; font-size: 12px;">R$ ${originalPrice.toFixed(2)}</span><br>
-                           <span style="color: #e60012; font-weight: bold;">R$ ${salePrice.toFixed(2)}</span>`
-                        : `R$ ${originalPrice.toFixed(2)}`
+                        ? `
+                            <span style="text-decoration: line-through; color: #999; font-size: 12px;">R$ ${originalPrice.toFixed(2)}</span><br>
+                            <span style="color: #e60012; font-weight: bold; font-size: 16px;">R$ ${salePrice.toFixed(2)}</span>
+                            ${
+                            // Compara o preço de venda com o menor histórico
+                            isLowest
+                                ? `<br><span style="color: #28a745; font-size: 11px; font-weight: bold;">⭐ RECORDE HISTÓRICO</span>` 
+                                : `<br><span style="color: #999; font-size: 10px;">Mínima: R$ ${parseFloat(game.lowestPrice).toFixed(2)}</span>`
+                            }
+                        `
+                        : `<span style="font-weight: bold;">R$ ${originalPrice.toFixed(2)}</span>`
                     }
                 </td>
                 <td style="${tdStyle}; text-align: center;">

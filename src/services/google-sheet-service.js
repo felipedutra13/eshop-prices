@@ -19,7 +19,8 @@ class GoogleSheetService {
 
       return records.map(game => ({
         id: game.ID,
-        title: game.Title
+        title: game.Title,
+        lowestPrice: game.Price
       }));
     } catch (error) {
       throw new Error(`Falha ao carregar wishlist: ${error.message}`);
