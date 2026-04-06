@@ -23,9 +23,6 @@ class PricesController {
 
         const googleSheetService = new GoogleSheetService({ sheetUrl: process.env.GOOGLE_SHEET_URL, scriptUrl: process.env.GOOGLE_APP_URL });
         
-        console.log("GOOGLE_SHEET_URL", process.env.GOOGLE_SHEET_URL);
-        console.log("GOOGLE_APP_URL", process.env.GOOGLE_APP_URL);
-
         const games = await googleSheetService.getGames();
 
         const nintendoService = new NintendoStoreService(exchangeRateApiService);

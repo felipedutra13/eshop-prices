@@ -29,7 +29,6 @@ class GoogleSheetService {
 
   async updateGamePrice(gameData) {
         try {
-          console.log("log -> ", this.scriptUrl);
             await axios.post(this.scriptUrl, gameData);
             console.log(`✅ Planilha atualizada para: ${gameData.name}`);
         } catch (error) {
